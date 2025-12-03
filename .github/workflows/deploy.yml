@@ -32,7 +32,7 @@ jobs:
             set -e
             cd /home/ivan_gridelli/assistant/gaia || exit 1
             if [ ! -d .git ]; then
-              git clone git@github.com:<youruser>/<assistant-repo>.git . || exit 1
+              git clone git@github.com:ivangridelli/gaia.git . || exit 1
             fi
             git reset --hard
             git fetch --all
