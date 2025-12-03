@@ -21,7 +21,7 @@ jobs:
 
       # Step 3: Deploy to Pi via SSH
       - name: Pull latest code and restart assistant
-        uses: appleboy/ssh-action@0.1.7
+        uses: appleboy/ssh-action@1.2.3
         with:
           host: ${{ secrets.PI_SSH_HOST }}
           username: ${{ secrets.PI_SSH_USER }}
