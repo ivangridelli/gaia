@@ -7,3 +7,5 @@ pypdf
 python-dotenv
 apscheduler
 wikipedia
+python-dateutil
+pytz
