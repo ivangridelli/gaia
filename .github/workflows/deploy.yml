@@ -1,0 +1,44 @@
+name: Deploy to Raspberry Pi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.PI_SSH_PRIVATE_KEY }}
+
+      - name: Ensure host known
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.PI_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Pull latest code and restart service
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.PI_SSH_HOST }}
+          username: ${{ secrets.PI_SSH_USER }}
+          key: ${{ secrets.PI_SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/ivan_gridelli/assistant/gaia || exit 1
+            if [ ! -d .git ]; then
+              git clone git@github.com:<youruser>/<assistant-repo>.git . || exit 1
+            fi
+            git reset --hard
+            git fetch --all
+            git checkout main
+            git pull origin main
+            /home/ivan_gridelli/assistant/gaia/.venv/bin/pip install -r requirements.txt
+            sudo systemctl daemon-reload
+            sudo systemctl restart assistant.service
+            sudo systemctl status assistant.service --no-pager -l
