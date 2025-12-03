@@ -1,2 +1,9 @@
 python-telegram-bot==22.5
-langgraph>=1.0
+langchain
+langgraph
+langchain-openai
+httpx
+pypdf
+python-dotenv
+apscheduler
+wikipedia
